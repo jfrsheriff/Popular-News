@@ -25,7 +25,13 @@ Setting Screen :
 
 <img src="https://user-images.githubusercontent.com/10083385/173221732-2ad8a3ac-35ce-4b64-9126-9241bd7ae05e.png" width="230" height="500">
 
+Error Screen : 
+
+<img src="https://user-images.githubusercontent.com/10083385/173221937-702ba584-08e4-40a8-8ad7-cdc752a7b87f.png" width="230" height="500">
+
 
 About screen : 
 
 <img src="https://user-images.githubusercontent.com/10083385/173221744-73bfeee0-d70d-4b8c-a234-4c52d9c1fdb1.png" width="230" height="500">
+
+
