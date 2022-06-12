@@ -8,8 +8,7 @@ Kindly enter the API key received from [NYTime](https://developer.nytimes.com/) 
 
 **Launch Screen :**
 
-
-<img src="https://user-images.githubusercontent.com/10083385/173221603-de3ae97c-95ec-464e-999b-e7844e4b2b34.png" width="230" height="500">
+<img src="https://user-images.githubusercontent.com/10083385/173222175-bb901c70-3cec-4351-8186-4fb3cd7765c3.png" width="230" height="500">
 
 
 **Most Popular News Articles Listing Screen :**
