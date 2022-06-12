@@ -13,7 +13,7 @@ Launch Screen :
 
 Most Popular News Articles Listing Screen : 
 
-                      <img src="https://user-images.githubusercontent.com/10083385/173221700-b05cc5fd-afe2-4c08-b175-d2857fb751a7.png" width="230" height="500">
+<img src="https://user-images.githubusercontent.com/10083385/173221700-b05cc5fd-afe2-4c08-b175-d2857fb751a7.png" width="230" height="500">
 
 
 News Reading Screen : 
