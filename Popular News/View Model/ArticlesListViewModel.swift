@@ -16,13 +16,13 @@ final class ArticlesListViewModel : ObservableObject{
     var selectedArticle : Article?
     
     private let userDefaultsHandler = UserDefaultHandler.shared
-    private let networkManager = NetworkManager.shared
     
     private var currentNoOfDays = UserDefaultHandler.shared.getUserSelectedNoOfDays()
     private var currentPopularArticleType = UserDefaultHandler.shared.getUserSelectedArticleType()
     
     private var shouldFlushDataAndRefresh : Bool = true
     
+    private var request : APIRequest<NewsResource>?
     
     public func fetchPopularNewsOnPullToRefresh(completion : @escaping () -> Void ){
         shouldFlushDataAndRefresh = true
@@ -30,6 +30,7 @@ final class ArticlesListViewModel : ObservableObject{
     }
     
     public func fetchPopularNewsOnViewAppear(completion : @escaping () -> Void ){
+        
         if isNewsConfigurationsChanged(){
             currentNoOfDays = userDefaultsHandler.getUserSelectedNoOfDays()
             currentPopularArticleType = userDefaultsHandler.getUserSelectedArticleType()
@@ -55,58 +56,44 @@ final class ArticlesListViewModel : ObservableObject{
             return
         }
         
-        fetchTopArticlesFor(articleType: userDefaultsHandler.getUserSelectedArticleType(),
-                            days: userDefaultsHandler.getUserSelectedNoOfDays()) { result in
-            
-            DispatchQueue.main.async {
-                self.shouldFlushDataAndRefresh = false
-                switch result{
-                    case .success(let news) :
-                        self.articles = news.results
-                        
-                    case .failure(let error) :
-                        self.articles = []
-                        self.errorOccured = true
-                        
-                        switch error{
-                            case .invalidURL:
-                                self.alertItem = AlertContext.invalidURL
-                            case .unableToComplete:
-                                self.alertItem = AlertContext.unableToComplete
-                            case .invalidResponse:
-                                self.alertItem = AlertContext.invalidResponse
-                            case .invalidData:
-                                self.alertItem = AlertContext.invalidData
-                        }
-                }
-                completion()
-            }
-        }
-    }
-    
-    // Helper method which uses URLManager and NetworkManager to fetch data and decode it in to Model Object
-    
-    private func fetchTopArticlesFor(articleType : PopularArticlesType,
-                                     days : LastNoOfDays,
-                                     completion: @escaping (Result<News,NewsError>) -> Void ) {
+        let resource = NewsResource(articleType: userDefaultsHandler.getUserSelectedArticleType(),
+                                    days: userDefaultsHandler.getUserSelectedNoOfDays())
+        let request = APIRequest(resource: resource)
+        self.request = request
         
-        let urlStr = URLManager.getUrlStringFor(articleType: articleType, days: days)
-        networkManager.getDataFor(urlStr: urlStr) { result in
-            switch result {
-                    
-                case .success(let data):
-                    do{
-                        let jsonDecoder = JSONDecoder.init()
-                        let decodedNewsResponse = try jsonDecoder.decode(News.self, from: data)
-                        completion(.success(decodedNewsResponse))
-                    }catch{
-                        completion(.failure(.invalidData))
-                    }
-                    
-                    
-                case .failure(let error):
-                    completion(.failure(error))
+        request.execute { [weak self] result in
+            
+            guard let self = self else {
+                completion()
+                return
             }
+            
+            self.shouldFlushDataAndRefresh = false
+            switch result{
+                case .success(let news) :
+                    self.articles = news.results
+                    
+                case .failure(let error) :
+                    self.articles = []
+                    self.errorOccured = true
+                    
+                    switch error{
+                        case .invalidURL:
+                            self.alertItem = AlertContext.invalidURL
+                        case .unableToComplete:
+                            self.alertItem = AlertContext.unableToComplete
+                        case .invalidResponse:
+                            self.alertItem = AlertContext.invalidResponse
+                        case .invalidData:
+                            self.alertItem = AlertContext.invalidData
+                        case .invalidDecoding:
+                            self.alertItem = AlertContext.invalidDecoding
+                        case .unKnown:
+                            self.alertItem = AlertContext.unKnown
+                    }
+            }
+            completion()
         }
     }
+    
 }

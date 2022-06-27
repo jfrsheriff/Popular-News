@@ -28,10 +28,8 @@ private struct RemoteImage : View {
         if let image = image{
             image.resizable()
         }else{
-            Image.init(systemName: "newspaper.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 40, height: 40, alignment: .center)
+            ProgressView()
+                .progressViewStyle(.circular)
         }
     }
 }
@@ -40,15 +38,22 @@ private struct RemoteImage : View {
 class ImageLoader : ObservableObject{
     
     @Published var image : Image? = nil
+    private var imageRequest : ImageRequest?
     
     func loadImage(fromUrlStr urlStr: String){
-        NetworkManager.shared.loadImageFrom(urlStr: urlStr) { uiImage in
-            guard let uiImage = uiImage else {
-                return
-            }
+        
+        guard let imgUrl = URL(string: urlStr) else {
+            return
+        }
+        
+        if self.image == nil{
+            let imageRequest = ImageRequest(url: imgUrl)
+            self.imageRequest = imageRequest
             
-            DispatchQueue.main.async {
-                self.image = Image.init(uiImage: uiImage)
+            imageRequest.execute { [weak self] result in
+                if case let .success(uiImage) = result {
+                    self?.image = Image.init(uiImage: uiImage)
+                }
             }
         }
     }

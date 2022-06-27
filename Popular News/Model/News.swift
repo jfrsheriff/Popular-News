@@ -98,3 +98,34 @@ struct MockData {
     }
 
 }
+
+enum PopularArticlesType : String, CaseIterable, Identifiable{
+    var id: RawValue { rawValue }
+    
+    case emailed = "emailed"
+    case shared = "shared"
+    case viewed = "viewed"
+    
+    var getCapitalizedRawValue : String {
+        self.rawValue.capitalized
+    }
+}
+
+enum LastNoOfDays : Int, CaseIterable, Identifiable{
+    var id: RawValue { rawValue }
+    
+    case today = 1
+    case week = 7
+    case month = 30
+    
+    var getStringValue : String {
+        switch self {
+            case .today:
+                return "Today"
+            case .week:
+                return "This Week"
+            case .month:
+                return "This Month"
+        }
+    }
+}

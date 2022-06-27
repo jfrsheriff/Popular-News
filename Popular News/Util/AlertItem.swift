@@ -35,6 +35,17 @@ enum AlertContext {
                                             message: Text("The data received from the server was invalid. Please try again or contact support."),
                                             dismissButton: .default(Text("Ok")))
     
+    
+    static let invalidDecoding      = AlertItem(title: Text("Decoding Error"),
+                                                message: Text("Unable to decode the data received from the server. Please try again or contact support."),
+                                                dismissButton: .default(Text("Ok")))
+    
+    
+    static let unKnown      = AlertItem(title: Text("Unknown Error"),
+                                        message: Text("Some UnKnown Error occured. Please try again or contact support."),
+                                        dismissButton: .default(Text("Ok")))
+    
+    
     //Fetch Error Message
     static let fetchingError      = AlertItem(title: Text("Error"),
                                               message: Text("There is some problem in Feching the News Articles  . Please try again or contact support."),

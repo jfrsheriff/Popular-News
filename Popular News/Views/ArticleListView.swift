@@ -28,8 +28,8 @@ struct ArticleListView: View {
                         ArticleCell.init(article: article)
                         
                             .onTapGesture {
-                                showSafariView = true
                                 viewModel.selectedArticle = article
+                                showSafariView = true
                             }
                         
                             .sheet(isPresented: $showSafariView,
@@ -65,6 +65,7 @@ struct ArticleListView: View {
             fetchPopularNewsOnViewAppear()
         }
         
+        
         //  Handles refreshing on error cases
         .onChange(of: viewModel.errorOccured) { newValue in
             if viewModel.errorOccured == false{
@@ -75,9 +76,7 @@ struct ArticleListView: View {
     
     // Handles Pull to refresh
     func fetchPopularNewsOnPullToRefresh(){
-        viewModel.fetchPopularNewsOnPullToRefresh {
-            
-        }
+        viewModel.fetchPopularNewsOnPullToRefresh {}
     }
     
     // Handles Refresh during view appearance
