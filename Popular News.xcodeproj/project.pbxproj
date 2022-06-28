@@ -155,11 +155,11 @@
 		127133122852101800CB76EA /* Popular News */ = {
 			isa = PBXGroup;
 			children = (
-				12314162286886D2002DB5C4 /* New Network Manager */,
 				12DC47C628549C7B009FE151 /* Popular-News-Info.plist */,
 				127133502852EDEA00CB76EA /* Util */,
 				1271334B2852EA2300CB76EA /* View Model */,
 				1271334A285269EE00CB76EA /* Views */,
+				12314162286886D2002DB5C4 /* New Network Manager */,
 				1271333D2852110300CB76EA /* Model */,
 				127133132852101800CB76EA /* Popular_NewsApp.swift */,
 				127133152852101800CB76EA /* ContentView.swift */,

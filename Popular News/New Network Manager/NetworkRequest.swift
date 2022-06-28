@@ -140,15 +140,9 @@ struct NewsResource: APIResource {
     let articleType : PopularArticlesType
     let days : LastNoOfDays
     
-    var queryItems: [URLQueryItem]?
-    
     var methodPath: String {
         return "/svc/mostpopular/v2/\(articleType.rawValue)/\(days.rawValue).json"
     }
-}
-
-
-// MARK: - Wrapper
-struct Wrapper<T: Decodable>: Decodable {
-    let items: [T]
+    
+    var queryItems: [URLQueryItem]?
 }
