@@ -7,7 +7,16 @@
 
 import Foundation
 
-final class ArticlesListViewModel : ObservableObject{
+protocol ArticlesListViewModelProtocol {
+    var articles : [Article] { get set }
+    var alertItem : AlertItem? { get set }
+    var errorOccured : Bool { get set }
+    var selectedArticle : Article?  { get set }
+    var userPreferenceSaver : StateSavingProtocol { get }
+}
+
+
+final class ArticlesListViewModel : ObservableObject, ArticlesListViewModelProtocol {
     
     @Published var articles : [Article] = []
     @Published var alertItem : AlertItem?
@@ -15,10 +24,10 @@ final class ArticlesListViewModel : ObservableObject{
     
     var selectedArticle : Article?
     
-    private let userDefaultsHandler = UserDefaultHandler.shared
+    var userPreferenceSaver : StateSavingProtocol
     
-    private var currentNoOfDays = UserDefaultHandler.shared.getUserSelectedNoOfDays()
-    private var currentPopularArticleType = UserDefaultHandler.shared.getUserSelectedArticleType()
+    private var currentNoOfDays : LastNoOfDays
+    private var currentPopularArticleType : PopularArticlesType
     
     private var shouldFlushDataAndRefresh : Bool = true
     
@@ -29,11 +38,17 @@ final class ArticlesListViewModel : ObservableObject{
         self.getTopArticles(completion: completion)
     }
     
+    init(userPreferenceSaver : StateSavingProtocol) {
+        self.userPreferenceSaver = userPreferenceSaver
+        self.currentNoOfDays = self.userPreferenceSaver.getUserSelectedNoOfDays()
+        self.currentPopularArticleType = self.userPreferenceSaver.getUserSelectedArticleType()
+    }
+    
     public func fetchPopularNewsOnViewAppear(completion : @escaping () -> Void ){
         
         if isNewsConfigurationsChanged(){
-            currentNoOfDays = userDefaultsHandler.getUserSelectedNoOfDays()
-            currentPopularArticleType = userDefaultsHandler.getUserSelectedArticleType()
+            currentNoOfDays = userPreferenceSaver.getUserSelectedNoOfDays()
+            currentPopularArticleType = userPreferenceSaver.getUserSelectedArticleType()
             
             shouldFlushDataAndRefresh = true
         }
@@ -41,8 +56,8 @@ final class ArticlesListViewModel : ObservableObject{
     }
     
     private func isNewsConfigurationsChanged() -> Bool {
-        if currentNoOfDays != userDefaultsHandler.getUserSelectedNoOfDays() ||
-            currentPopularArticleType != userDefaultsHandler.getUserSelectedArticleType(){
+        if currentNoOfDays != userPreferenceSaver.getUserSelectedNoOfDays() ||
+            currentPopularArticleType != userPreferenceSaver.getUserSelectedArticleType(){
             return true
         }
         return false
@@ -56,8 +71,8 @@ final class ArticlesListViewModel : ObservableObject{
             return
         }
         
-        let resource = NewsResource(articleType: userDefaultsHandler.getUserSelectedArticleType(),
-                                    days: userDefaultsHandler.getUserSelectedNoOfDays())
+        let resource = NewsResource(articleType: userPreferenceSaver.getUserSelectedArticleType(),
+                                    days: userPreferenceSaver.getUserSelectedNoOfDays())
         let request = APIRequest(resource: resource)
         self.request = request
         

@@ -7,7 +7,15 @@
 
 import Foundation
 
-struct UserDefaultHandler {
+protocol StateSavingProtocol{
+    func saveUserSelectedArticleType(_ articleType : PopularArticlesType)
+    func saveUserSelectedNoOfDays(_ noOfDays : LastNoOfDays)
+    func getUserSelectedArticleType() -> PopularArticlesType
+    func getUserSelectedNoOfDays() -> LastNoOfDays
+}
+
+
+struct UserDefaultHandler : StateSavingProtocol {
     
     static public let shared : UserDefaultHandler = UserDefaultHandler.init()
     private let userDefault = UserDefaults.standard
@@ -41,7 +49,7 @@ struct UserDefaultHandler {
 }
 
 
-struct UserDefaultKeys{
+private struct UserDefaultKeys{
     static let articleType : String = "articleType"
     static let noOfDays : String = "noOfDays"
 }

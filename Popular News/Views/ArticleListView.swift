@@ -10,7 +10,7 @@ import SafariServices
 
 struct ArticleListView: View {
     
-    @StateObject private var viewModel = ArticlesListViewModel.init()
+    @StateObject private var viewModel = ArticlesListViewModel.init(userPreferenceSaver: UserDefaultHandler.shared)
     @State private var showSafariView : Bool = false
     @State private var isLoading : Bool = false
     
@@ -104,3 +104,5 @@ struct ArticleListView_Previews: PreviewProvider {
         ArticleListView()
     }
 }
+
+
